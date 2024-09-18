@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IEEE CS - Noticias</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="menu">
+        <div class="container flex">
+            <div class="logo">
+                <img src="./images/logo.png" alt="Logo IEEE" width="120px">
+                <h1 class="separator"></h1>
+                <div class="logo-text">
+                    <p class="title">Universidad Nacional Mayor de San Marcos</p>
+                    <p class="subtitle">IEEE Student Branch</p>
+                </div>
+            </div>
+
+            <ul class="nav">
+                <li class="nav-item"><a href="#">Inicio</a></li>
+                <li class="nav-item"><a href="#">¿Quiénes somos?</a></li>
+                <li class="nav-item"><a href="#">Noticias</a></li>
+                <li class="nav-item"><a href="#">Eventos</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="principal-title flex">
+        <h1>Eventos</h1>
+    </div>
+    
+    <div class="section novedades-section">
+        <p class="title-separator">Actuales</p>
+        <div class="card-container" id="current-events"></div>
+    </div>
+
+    <div class="section tecnologia-section">
+        <p class="title-separator">Pasados</p>
+        <div class="card-container" id="past-events"></div>            
+    </div>
+
+    <script>
+    const API_EVENTOS = 'http://localhost:3001/eventos';
+
+    function filterEvents(events) {
+        const today = new Date();
+        const currentEvents = events.filter(event => new Date(event.date) >= today);
+        const pastEvents = events.filter(event => new Date(event.date) < today);
+        return { currentEvents, pastEvents };
+    }
+
+    function renderEvents(eventData, containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+
+        eventData.forEach(event => {
+            const eventItem = document.createElement('div');
+            eventItem.classList.add('card');
+            eventItem.style.backgroundImage = `url(${event.img})`;
+            eventItem.innerHTML = `
+                <div class="text-container">
+                    <h2>${event.title}</h2>
+                    <p><strong>FECHA:</strong> ${event.date}</p>
+                    <p><strong>HORA:</strong> ${event.time}</p>
+                    <p><strong>PLATAFORMA:</strong> ${event.platform}</p>
+                </div>
+                <div class="button-container">
+                    <a href="eventos2.html?id=${event.id}" class="btn">Suscribirse</a>
+                </div>
+            `;
+            container.appendChild(eventItem);
+        });
+    }
+
+    function showLoading(containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '<p class="loading-message">Cargando eventos...</p>';
+    }
+
+    function renderError(containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '<p class="error-message">Error al cargar los eventos.</p>';
+    }
+
+    async function fetchAndRenderEvents() {
+        try {
+            showLoading('current-events');
+            showLoading('past-events');
+            
+            const response = await fetch(API_EVENTOS);
+            if (!response.ok) throw new Error('Error al cargar los eventos');
+            const events = await response.json();
+
+            const { currentEvents, pastEvents } = filterEvents(events);
+            renderEvents(currentEvents, 'current-events');
+            renderEvents(pastEvents, 'past-events');
+        } catch (error) {
+            console.error(error);
+            renderError('current-events');
+            renderError('past-events');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchAndRenderEvents);
+    </script>
+
+</body>
+</html>
