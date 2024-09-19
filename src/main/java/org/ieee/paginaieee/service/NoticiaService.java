@@ -19,9 +19,9 @@ public class NoticiaService {
     public List<NoticiaListaDTO> obtenerTodasLasNoticias() {
         return noticiaRepository.findAll().stream().map(noticia -> {
             NoticiaListaDTO dto = new NoticiaListaDTO();
-            dto.setTitulo(noticia.getTitulo());
-            dto.setImagen(noticia.getImagen());
-            dto.setFechaDePublicacion(noticia.getFechaDePublicacion());
+            dto.setTitle(noticia.getTitulo());
+            dto.setImg(noticia.getImagen());
+            dto.setDate(noticia.getFechaDePublicacion());
             return dto;
         }).collect(Collectors.toList());
     }
@@ -31,15 +31,15 @@ public class NoticiaService {
         Noticia noticia = noticiaRepository.findById(id).orElseThrow(() -> new RuntimeException("Noticia no encontrada"));
 
         NoticiaDetalleDTO dto = new NoticiaDetalleDTO();
-        dto.setTitulo(noticia.getTitulo());
-        dto.setContenido(noticia.getContenido());
-        dto.setImagen(noticia.getImagen());
+        dto.setTitle(noticia.getTitulo());
+        dto.setSource(noticia.getContenido());
+        dto.setImg(noticia.getImagen());
         dto.setAutor(noticia.getAutor());
-        dto.setFechaDePublicacion(noticia.getFechaDePublicacion());
-        dto.setComentarios(noticia.getComentarios().stream().map(comentario -> {
+        dto.setDate(noticia.getFechaDePublicacion());
+        dto.setComment(noticia.getComentarios().stream().map(comentario -> {
             ComentarioDTO comentarioDTO = new ComentarioDTO();
-            comentarioDTO.setContenido(comentario.getContenido());
-            comentarioDTO.setNombre(comentario.getNombre());
+            comentarioDTO.setSource(comentario.getContenido());
+            comentarioDTO.setName(comentario.getNombre());
             return comentarioDTO;
         }).collect(Collectors.toList()));
 

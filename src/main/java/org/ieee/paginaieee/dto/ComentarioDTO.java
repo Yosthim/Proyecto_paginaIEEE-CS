@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class ComentarioDTO {
-    private String contenido;
-    private String nombre;
+    private String source;
+    private String name;
 }

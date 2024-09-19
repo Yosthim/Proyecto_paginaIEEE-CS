@@ -10,6 +10,7 @@ import org.ieee.paginaieee.service.NoticiaService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/noticias")
 public class NoticiaController {

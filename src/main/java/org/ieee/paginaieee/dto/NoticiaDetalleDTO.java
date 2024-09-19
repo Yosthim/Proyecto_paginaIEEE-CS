@@ -6,10 +6,10 @@ import java.util.List;
 
 @Data
 public class NoticiaDetalleDTO {
-    private String titulo;
-    private String contenido;
-    private String imagen;
+    private String title;
+    private String source;
+    private String img;
     private String autor;
-    private Date fechaDePublicacion;
-    private List<ComentarioDTO> comentarios;
+    private Date date;
+    private List<ComentarioDTO> comment;
 }
