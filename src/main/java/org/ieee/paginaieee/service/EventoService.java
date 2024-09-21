@@ -4,7 +4,6 @@ import org.ieee.paginaieee.dto.EventoDetalleDTO;
 import org.ieee.paginaieee.dto.EventoListaDTO;
 import org.ieee.paginaieee.dto.SuscripcionDTO;
 import org.ieee.paginaieee.entity.Evento;
-import org.ieee.paginaieee.entity.Suscripcion;
 import org.ieee.paginaieee.repository.EventoRepository;
 import org.ieee.paginaieee.repository.SuscripcionRepository;
 import org.springframework.beans.factory.annotation.Autowired;

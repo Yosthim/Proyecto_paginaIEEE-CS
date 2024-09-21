@@ -1,6 +1,5 @@
 package org.ieee.paginaieee.service;
 
-import org.ieee.paginaieee.dto.EventoDetalleDTO;
 import org.ieee.paginaieee.dto.SuscripcionDTO;
 import org.ieee.paginaieee.entity.Evento;
 import org.ieee.paginaieee.entity.Suscripcion;
