@@ -2,11 +2,15 @@ package org.ieee.paginaieee.dto;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Data
 public class EventoListaDTO {
     private String nombre;
-    private Date fecha;
+    private LocalDate fecha;
+    private LocalTime hora;
+    private String imagen;
     private String ubicacion;
 }

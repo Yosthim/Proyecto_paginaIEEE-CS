@@ -3,7 +3,8 @@ package org.ieee.paginaieee.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -17,8 +18,9 @@ public class Evento {
     private String nombre;
     private String descripcion;
     private String ubicacion;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fecha;
+    private String imagen;
+    private LocalDate fecha;
+    private LocalTime hora;
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private List<Suscripcion> suscripciones;
 

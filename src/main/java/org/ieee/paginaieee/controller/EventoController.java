@@ -19,7 +19,7 @@ public class EventoController {
     private EventoService eventoService;
     //Endpoint para obtener la lista de eventos(nombre,fecha,ubicacion)
     @GetMapping
-    public ResponseEntity<List<EventoListaDTO>> obtenerEventos() {return ResponseEntity.ok(eventoService.obtenerTodosLosEventos());}
+    public List<EventoListaDTO> obtenerEventos() {return eventoService.obtenerTodosLosEventos();}
     // Endpoint para obtener los detalles de un evento específica por id
     @GetMapping("/{id}")
     public ResponseEntity<EventoDetalleDTO> obtenerEventoPorId(@PathVariable Long id){
@@ -33,7 +33,11 @@ public class EventoController {
     //Endpoint para procesar la suscripción con nombre y correo para un evento
     @PostMapping("/{id}/suscripcion")
     public ResponseEntity<String> procesarEventoSuscripcion(@PathVariable Long id, @RequestBody SuscripcionDTO suscripcionDTO){
-        eventoService.procesarEventoSuscripcion(id,suscripcionDTO);
-        return new ResponseEntity<>("Suscripcion procesada", HttpStatus.CREATED);
+        try {
+            eventoService.procesarEventoSuscripcion(id,suscripcionDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Suscripción creada exitosamente");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
 }
