@@ -43,22 +43,22 @@
     </div>
 
     <script>
-        const API_EVENTOS_ACTUALES = 'http://localhost:3001/eventos/actuales';
-        const API_EVENTOS_PASADOS = 'http://localhost:3001/eventos/pasados';
-
+        const API_EVENTOS = 'https://jwwk1hxf-8080.brs.devtunnels.ms/api/eventos';
+    
         function renderEvents(eventData, containerId) {
             const container = document.getElementById(containerId);
             container.innerHTML = ''; 
-
+    
             eventData.forEach(event => {
                 const eventItem = document.createElement('div');
                 eventItem.classList.add('card');
-                eventItem.style.backgroundImage = `url(${event.img})`; 
+                eventItem.style.backgroundImage = `url(${event.imagen})`; 
+                console.log(event.imagen);
                 eventItem.innerHTML = `
                     <div class="text-container">
-                        <h2>${event.title}</h2>
+                        <h2>${event.nombre}</h2>
                         <p><strong>FECHA:</strong> ${event.fecha}</p>
-                        <p><strong>HORA:</strong> ${event.time}</p>
+                        <p><strong>HORA:</strong> ${event.hora}</p>
                         <p><strong>PLATAFORMA:</strong> ${event.ubicacion}</p>
                     </div>
                     <div class="button-container">
@@ -68,33 +68,57 @@
                 container.appendChild(eventItem); 
             });
         }
-
+    
         function showLoading(containerId) {
             const container = document.getElementById(containerId);
             container.innerHTML = '<p class="loading-message">Cargando eventos...</p>';
         }
-
+    
         function renderError(containerId) {
             const container = document.getElementById(containerId);
             container.innerHTML = '<p class="error-message">Error al cargar los eventos.</p>';
         }
-
-        async function fetchEvents(apiUrl, containerId) {
+    
+        function filterEvents(eventData) {
+            const now = new Date();
+            const eventosActuales = [];
+            const eventosPasados = [];
+    
+            eventData.forEach(event => {
+                const eventDate = new Date(`${event.fecha}T${event.hora}`);
+    
+                if (eventDate > now) {
+                    eventosActuales.push(event);
+                } else {
+                    eventosPasados.push(event);
+                }
+            });
+    
+            return { eventosActuales, eventosPasados };
+        }
+    
+        async function fetchEvents(apiUrl) {
             try {
-                showLoading(containerId); 
+                showLoading('current-events');
+                showLoading('past-events');
                 const response = await fetch(apiUrl); 
                 if (!response.ok) throw new Error('Error en la solicitud');
                 const data = await response.json(); 
-                renderEvents(data, containerId); 
+    
+                const { eventosActuales, eventosPasados } = filterEvents(data);
+    
+                renderEvents(eventosActuales, 'current-events');
+                renderEvents(eventosPasados, 'past-events');
+    
             } catch (error) {
                 console.error(error);
-                renderError(containerId); 
+                renderError('current-events');
+                renderError('past-events');
             }
         }
-
+    
         document.addEventListener('DOMContentLoaded', () => {
-            fetchEvents(API_EVENTOS_ACTUALES, 'current-events');
-            fetchEvents(API_EVENTOS_PASADOS, 'past-events');     
+            fetchEvents(API_EVENTOS);
         });
     </script>
 
