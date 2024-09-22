@@ -11,7 +11,7 @@
     <div class="menu">
         <div class="container flex">
             <div class="logo">
-                <img src="./images/logo.png" alt="Logo IEEE" width="120px">
+                <img src="./images/logo.png" alt="Logo IEEE" width="120px"> 
                 <h1 class="separator"></h1>
                 <div class="logo-text">
                     <p class="title">Universidad Nacional Mayor de San Marcos</p>
@@ -27,46 +27,74 @@
             </ul>
         </div>
     </div>
+
     <div class="principal-title flex">
-        <h1>Eventos</h1>
-    </div>
-    <!-- Sección de Evento -->
-    <div class="section-event-detail">
-        <div class="event-banner">
-            <h1>NEURALINKS: Descifrando el poder de las redes neuronales</h1>
-            <p><strong>FECHA:</strong> 22 y 23 de noviembre <br> 
-               <strong>PLATAFORMA:</strong> Zoom y Google Meets</p>
-        </div>
-        <div class="event-description event-info-text">
-            <h2>¿Qué es NEURALINKS?</h2>
-            <p>NEURALINKS: Descifrando el poder de las redes neuronales es un evento de dos días donde podrás explorar el mundo de las redes neuronales y su impacto en diversas áreas.</p>
-            <p>A lo largo del evento, destacados expertos nacionales e internacionales compartirán sus conocimientos sobre el funcionamiento de las redes neuronales y sus aplicaciones en campos como la inteligencia artificial, medicina y robótica.</p>
-            <p>Es una gran oportunidad para aprender, conectar con profesionales del sector y descubrir todo lo que las redes neuronales tienen para ofrecer.</p>
-        </div>
-    </div>
-    <div class="section tecnologia-section">
-        <p class="title-separator"><strong>No te pierdas esta oportunidad!</strong></p>
-        <div class="card-container" id="past-events">
-            <!-- Las tarjetas de eventos pasados se generarán aquí -->
-        </div>            
+        <h1>Detalle del Evento</h1>
     </div>
 
+    <div class="section-event-detail" id="event-detail"></div>
+    
     <div class="section-inscription">
         <h2>INSCRIPCIÓN</h2>
         <form class="inscription-form">
             <div class="form-group">
                 <div>
                     <label for="usuario">Usuario</label>
-                    <input type="text" id="usuario" placeholder="Ingresar usuario...">
+                    <input type="text" id="usuario" placeholder="Ingresar usuario..." required>
                 </div>
                 <div>
                     <label for="email">Correo electrónico</label>
-                    <input type="email" id="email" placeholder="Ingresar correo...">
+                    <input type="email" id="email" placeholder="Ingresar correo..." required>
                 </div>
             </div>
             <button type="submit" class="btn-inscripcion">Confirmar suscripción</button>
         </form>
     </div>
 
+    <script>
+        // Obtener el ID del evento desde la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventId = urlParams.get('id');
+        const API_EVENTO = `https://jwwk1hxf-8080.brs.devtunnels.ms/api/eventos/${eventId}`;
+
+        async function fetchEvent() {
+            try {
+                const response = await fetch(API_EVENTO);
+                if (!response.ok) throw new Error('Error en la solicitud');
+                const event = await response.json();
+                renderEvent(event);
+            } catch (error) {
+                document.getElementById('event-detail').innerHTML = '<p>Error al cargar los detalles del evento.</p>';
+                console.error(error);
+            }
+        }
+
+        function renderEvent(event) {
+            const eventDetailContainer = document.getElementById('event-detail');
+            eventDetailContainer.innerHTML = `
+                <div class="text-container">
+                    <h2>${event.nombre}</h2>
+                    <img src="${event.imagen}" alt="${event.nombre}" style="width: 200px;">
+                    <p><strong>Descripción:</strong> ${event.descripcion}</p>
+                    <p><strong>Fecha:</strong> ${event.fecha}</p>
+                    <p><strong>Hora:</strong> ${event.hora}</p>
+                    <p><strong>Ubicación:</strong> ${event.ubicacion}</p>
+                </div>
+            `;
+        }
+
+        // Ejecutar la función al cargar la página
+        document.addEventListener('DOMContentLoaded', fetchEvent);
+
+        // Procesar el formulario
+        document.querySelector('.inscription-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario').value;
+            const email = document.getElementById('email').value;
+
+            // Aquí puedes agregar la lógica para manejar la inscripción
+            alert(`¡Inscripción confirmada para ${usuario} (${email}) al evento!`);
+        });
+    </script>
 </body>
 </html>
