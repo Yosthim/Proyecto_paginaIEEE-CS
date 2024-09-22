@@ -29,6 +29,7 @@ public class EventoService {
             eventos.setNombre(evento.getNombre());
             eventos.setFecha(evento.getFecha());
             eventos.setHora(evento.getHora());
+            eventos.setId(evento.getId());
             eventos.setImagen(evento.getImagen());
             eventos.setUbicacion(evento.getUbicacion());
             return eventos;
