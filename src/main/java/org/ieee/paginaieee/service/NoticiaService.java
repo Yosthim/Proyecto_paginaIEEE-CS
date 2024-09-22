@@ -21,6 +21,7 @@ public class NoticiaService {
             NoticiaListaDTO dto = new NoticiaListaDTO();
             dto.setTitle(noticia.getTitulo());
             dto.setImg(noticia.getImagen());
+            dto.setId(noticia.getId());
             dto.setDate(noticia.getFechaDePublicacion());
             return dto;
         }).collect(Collectors.toList());

@@ -8,4 +8,5 @@ public class NoticiaListaDTO {
     private String title;
     private String img;
     private Date date;
+    private Long id;
 }
