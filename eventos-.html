@@ -43,68 +43,59 @@
     </div>
 
     <script>
-    const API_EVENTOS = 'http://localhost:3001/eventos';
+        const API_EVENTOS_ACTUALES = 'http://localhost:3001/eventos/actuales';
+        const API_EVENTOS_PASADOS = 'http://localhost:3001/eventos/pasados';
 
-    function filterEvents(events) {
-        const today = new Date();
-        const currentEvents = events.filter(event => new Date(event.date) >= today);
-        const pastEvents = events.filter(event => new Date(event.date) < today);
-        return { currentEvents, pastEvents };
-    }
+        function renderEvents(eventData, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; 
 
-    function renderEvents(eventData, containerId) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = '';
-
-        eventData.forEach(event => {
-            const eventItem = document.createElement('div');
-            eventItem.classList.add('card');
-            eventItem.style.backgroundImage = `url(${event.img})`;
-            eventItem.innerHTML = `
-                <div class="text-container">
-                    <h2>${event.title}</h2>
-                    <p><strong>FECHA:</strong> ${event.date}</p>
-                    <p><strong>HORA:</strong> ${event.time}</p>
-                    <p><strong>PLATAFORMA:</strong> ${event.platform}</p>
-                </div>
-                <div class="button-container">
-                    <a href="eventos2.html?id=${event.id}" class="btn">Suscribirse</a>
-                </div>
-            `;
-            container.appendChild(eventItem);
-        });
-    }
-
-    function showLoading(containerId) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = '<p class="loading-message">Cargando eventos...</p>';
-    }
-
-    function renderError(containerId) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = '<p class="error-message">Error al cargar los eventos.</p>';
-    }
-
-    async function fetchAndRenderEvents() {
-        try {
-            showLoading('current-events');
-            showLoading('past-events');
-            
-            const response = await fetch(API_EVENTOS);
-            if (!response.ok) throw new Error('Error al cargar los eventos');
-            const events = await response.json();
-
-            const { currentEvents, pastEvents } = filterEvents(events);
-            renderEvents(currentEvents, 'current-events');
-            renderEvents(pastEvents, 'past-events');
-        } catch (error) {
-            console.error(error);
-            renderError('current-events');
-            renderError('past-events');
+            eventData.forEach(event => {
+                const eventItem = document.createElement('div');
+                eventItem.classList.add('card');
+                eventItem.style.backgroundImage = `url(${event.img})`; 
+                eventItem.innerHTML = `
+                    <div class="text-container">
+                        <h2>${event.title}</h2>
+                        <p><strong>FECHA:</strong> ${event.fecha}</p>
+                        <p><strong>HORA:</strong> ${event.time}</p>
+                        <p><strong>PLATAFORMA:</strong> ${event.ubicacion}</p>
+                    </div>
+                    <div class="button-container">
+                        <a href="detail.html?id=${event.id}" class="btn">Suscribirse</a>
+                    </div>
+                `;
+                container.appendChild(eventItem); 
+            });
         }
-    }
 
-    document.addEventListener('DOMContentLoaded', fetchAndRenderEvents);
+        function showLoading(containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '<p class="loading-message">Cargando eventos...</p>';
+        }
+
+        function renderError(containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '<p class="error-message">Error al cargar los eventos.</p>';
+        }
+
+        async function fetchEvents(apiUrl, containerId) {
+            try {
+                showLoading(containerId); 
+                const response = await fetch(apiUrl); 
+                if (!response.ok) throw new Error('Error en la solicitud');
+                const data = await response.json(); 
+                renderEvents(data, containerId); 
+            } catch (error) {
+                console.error(error);
+                renderError(containerId); 
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchEvents(API_EVENTOS_ACTUALES, 'current-events');
+            fetchEvents(API_EVENTOS_PASADOS, 'past-events');     
+        });
     </script>
 
 </body>
