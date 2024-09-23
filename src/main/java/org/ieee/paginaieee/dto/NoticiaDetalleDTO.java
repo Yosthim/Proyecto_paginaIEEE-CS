@@ -7,9 +7,15 @@ import java.util.List;
 @Data
 public class NoticiaDetalleDTO {
     private String title;
+    private String tema;
     private String source;
+    private String details;
+    private String detailsContent;
+    private String aditional;
+    private String contextAditional;
     private String img;
-    private String autor;
+    private String sourceLink;
     private Date date;
+
     private List<ComentarioDTO> comment;
 }

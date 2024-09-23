@@ -19,9 +19,9 @@ public class NoticiaService {
     public List<NoticiaListaDTO> obtenerTodasLasNoticias() {
         return noticiaRepository.findAll().stream().map(noticia -> {
             NoticiaListaDTO dto = new NoticiaListaDTO();
+            dto.setId(noticia.getId());
             dto.setTitle(noticia.getTitulo());
             dto.setImg(noticia.getImagen());
-            dto.setId(noticia.getId());
             dto.setDate(noticia.getFechaDePublicacion());
             return dto;
         }).collect(Collectors.toList());
@@ -33,9 +33,14 @@ public class NoticiaService {
 
         NoticiaDetalleDTO dto = new NoticiaDetalleDTO();
         dto.setTitle(noticia.getTitulo());
+        dto.setTema(noticia.getTema());
         dto.setSource(noticia.getContenido());
+        dto.setDetails(noticia.getDetalles());
+        dto.setDetailsContent(noticia.getDetallesContent());
+        dto.setAditional(noticia.getAdicional());
+        dto.setContextAditional(noticia.getContextAdicional());
         dto.setImg(noticia.getImagen());
-        dto.setAutor(noticia.getAutor());
+        dto.setSourceLink(noticia.getSourceLink());
         dto.setDate(noticia.getFechaDePublicacion());
         dto.setComment(noticia.getComentarios().stream().map(comentario -> {
             ComentarioDTO comentarioDTO = new ComentarioDTO();

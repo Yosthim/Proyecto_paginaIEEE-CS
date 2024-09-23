@@ -7,8 +7,8 @@ import java.time.LocalTime;
 
 @Data
 public class EventoListaDTO {
-    private String nombre;
     private Long id;
+    private String nombre;
     private LocalDate fecha;
     private LocalTime hora;
     private String imagen;

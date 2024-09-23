@@ -13,9 +13,14 @@ public class Noticia {
     private Long id;
 
     private String titulo;
+    private String tema;
     private String contenido;
-    private String autor;
+    private String detalles;
+    private String detallesContent;
+    private String adicional;
+    private String contextAdicional;
     private String imagen;
+    private String sourceLink;
 
     @Temporal(TemporalType.DATE)
     private Date fechaDePublicacion;
