@@ -29,30 +29,12 @@
     </div>
 
     <div class="principal-title flex">
-        <h1>Detalle del Evento</h1>
+        <h1>Detalles del Evento</h1>
     </div>
 
     <div class="section-event-detail" id="event-detail"></div>
     
-    <div class="section-inscription">
-        <h2>INSCRIPCIÓN</h2>
-        <form class="inscription-form">
-            <div class="form-group">
-                <div>
-                    <label for="usuario">Usuario</label>
-                    <input type="text" id="usuario" placeholder="Ingresar usuario..." required>
-                </div>
-                <div>
-                    <label for="email">Correo electrónico</label>
-                    <input type="email" id="email" placeholder="Ingresar correo..." required>
-                </div>
-            </div>
-            <button type="submit" class="btn-inscripcion">Confirmar suscripción</button>
-        </form>
-    </div>
-
     <script>
-        // Obtener el ID del evento desde la URL
         const urlParams = new URLSearchParams(window.location.search);
         const eventId = urlParams.get('id');
         const API_EVENTO = `https://jwwk1hxf-8080.brs.devtunnels.ms/api/eventos/${eventId}`;
@@ -72,29 +54,52 @@
         function renderEvent(event) {
             const eventDetailContainer = document.getElementById('event-detail');
             eventDetailContainer.innerHTML = `
-                <div class="text-container">
-                    <h2>${event.nombre}</h2>
-                    <img src="${event.imagen}" alt="${event.nombre}" style="width: 200px;">
-                    <p><strong>Descripción:</strong> ${event.descripcion}</p>
-                    <p><strong>Fecha:</strong> ${event.fecha}</p>
-                    <p><strong>Hora:</strong> ${event.hora}</p>
-                    <p><strong>Ubicación:</strong> ${event.ubicacion}</p>
-                </div>
+                <section class="section-event-detail">
+                    <!-- Banner del evento -->
+                    <div class="event-banner" style="background-image: url(${event.imagen});">
+                        <h2>${event.nombre}</h2>
+                        <p class="event-info-text"><strong>Fecha:</strong> ${event.fecha}</p>
+                        <p class="event-info-text"><strong>Hora:</strong> ${event.hora}</p>
+                        <p class="event-info-text"><strong>Plataforma:</strong> ${event.ubicacion}</p>
+                    </div>
+        
+                    <!-- Descripción del evento -->
+                    <div class="event-description">
+                        <p>${event.descripcion}</p>
+                    </div>
+
+                    <!-- Espacio adicional -->
+                    <div style="margin-bottom: 20px;"></div>
+                </section>
+        
+                <!-- Sección de inscripción -->
+                <section class="section-inscription">
+                    <h2>Inscríbete al evento</h2>
+                    <form class="inscription-form">
+                        <div class="form-group">
+                            <div>
+                                <label for="usuario">Nombre</label>
+                                <input type="text" id="usuario" name="name" placeholder="Tu nombre" required>
+                            </div>
+                            <div>
+                                <label for="email">Correo electrónico</label>
+                                <input type="email" id="email" name="email" placeholder="Tu correo" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-inscripcion">Inscribirse</button>
+                    </form>
+                </section>
             `;
+            document.querySelector('.inscription-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const usuario = document.getElementById('usuario').value;
+                const email = document.getElementById('email').value;
+
+                alert(`¡Inscripción confirmada para ${usuario} (${email}) al evento!`);
+            });
         }
 
-        // Ejecutar la función al cargar la página
         document.addEventListener('DOMContentLoaded', fetchEvent);
-
-        // Procesar el formulario
-        document.querySelector('.inscription-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const usuario = document.getElementById('usuario').value;
-            const email = document.getElementById('email').value;
-
-            // Aquí puedes agregar la lógica para manejar la inscripción
-            alert(`¡Inscripción confirmada para ${usuario} (${email}) al evento!`);
-        });
     </script>
 </body>
 </html>
