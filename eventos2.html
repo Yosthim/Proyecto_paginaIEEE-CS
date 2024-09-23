@@ -36,8 +36,9 @@
     
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const eventId = urlParams.get('id');
+        const eventId = urlParams.get('id'); 
         const API_EVENTO = `https://jwwk1hxf-8080.brs.devtunnels.ms/api/eventos/${eventId}`;
+        const API_SUSCRIPCION = `https://jwwk1hxf-8080.brs.devtunnels.ms/api/eventos/${eventId}/suscripcion`;
 
         async function fetchEvent() {
             try {
@@ -55,24 +56,17 @@
             const eventDetailContainer = document.getElementById('event-detail');
             eventDetailContainer.innerHTML = `
                 <section class="section-event-detail">
-                    <!-- Banner del evento -->
                     <div class="event-banner" style="background-image: url(${event.imagen});">
                         <h2>${event.nombre}</h2>
                         <p class="event-info-text"><strong>Fecha:</strong> ${event.fecha}</p>
                         <p class="event-info-text"><strong>Hora:</strong> ${event.hora}</p>
                         <p class="event-info-text"><strong>Plataforma:</strong> ${event.ubicacion}</p>
                     </div>
-        
-                    <!-- Descripción del evento -->
                     <div class="event-description">
                         <p>${event.descripcion}</p>
                     </div>
-
-                    <!-- Espacio adicional -->
                     <div style="margin-bottom: 20px;"></div>
                 </section>
-        
-                <!-- Sección de inscripción -->
                 <section class="section-inscription">
                     <h2>Inscríbete al evento</h2>
                     <form class="inscription-form">
@@ -90,15 +84,31 @@
                     </form>
                 </section>
             `;
-            document.querySelector('.inscription-form').addEventListener('submit', (e) => {
+
+            document.querySelector('.inscription-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const usuario = document.getElementById('usuario').value;
                 const email = document.getElementById('email').value;
 
-                alert(`¡Inscripción confirmada para ${usuario} (${email}) al evento!`);
+                try {
+                    const response = await fetch(API_SUSCRIPCION, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ nombre: usuario, correo: email }) 
+                    });
+
+                    if (!response.ok) throw new Error('Error al inscribirse');
+    
+                    alert(`¡Inscripción confirmada para ${usuario} (${email}) al evento!`);
+                } catch (error) {
+                    alert('Error al inscribirse. Inténtalo de nuevo.');
+                    console.error(error);
+                }
             });
         }
-
+    
         document.addEventListener('DOMContentLoaded', fetchEvent);
     </script>
 </body>

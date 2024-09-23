@@ -8,7 +8,7 @@ function renderEvents(eventData, containerId) {
     eventData.forEach(event => {
         const eventItem = document.createElement('div');
         eventItem.classList.add('card');
-        eventItem.style.backgroundImage = `url(${event.img})`;
+        eventItem.style.backgroundImage = `url(${event.img})`; 
         eventItem.innerHTML = `
             <div class="text-container">
                 <h2>${event.title}</h2>
@@ -20,10 +20,10 @@ function renderEvents(eventData, containerId) {
                 <a href="detail.html?id=${event.id}" class="btn">Suscribirse</a>
             </div>
         `;
-        container.appendChild(eventItem);
+        container.appendChild(eventItem); 
     });
 
-    addSubscriptionListeners();
+    addSubscriptionListeners(); 
 }
 
 function showLoading(containerId) {
@@ -38,14 +38,14 @@ function renderError(containerId) {
 
 async function fetchEvents(apiUrl, containerId) {
     try {
-        showLoading(containerId);
+        showLoading(containerId); 
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error('Error en la solicitud');
         const data = await response.json();
-        renderEvents(data, containerId);
+        renderEvents(data, containerId); 
     } catch (error) {
         console.error(error);
-        renderError(containerId);
+        renderError(containerId); 
     }
 }
 
@@ -53,18 +53,40 @@ function addSubscriptionListeners() {
     const subscribeButtons = document.querySelectorAll('.btn');
     subscribeButtons.forEach(button => {
         button.addEventListener('click', function(event) {
-            event.preventDefault();
+            event.preventDefault(); 
             const eventId = this.getAttribute('href').split('=')[1];
-            subscribeToEvent(eventId);
+            subscribeToEvent(eventId); 
         });
     });
 }
 
-function subscribeToEvent(eventId) {
-    alert(`Te has suscrito al evento con ID: ${eventId}`);
+async function subscribeToEvent(eventId) {
+    const nombre = prompt("Por favor, introduce tu nombre:");
+    const correo = prompt("Por favor, introduce tu correo electrónico:");
+
+    if (nombre && correo) {
+        try {
+            const response = await fetch(`https://jwwk1hxf-8080.brs.devtunnels.ms/api/eventos/${eventId}/suscripcion`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nombre, correo }) 
+            });
+
+            if (!response.ok) throw new Error('Error al suscribirse'); 
+
+            alert(`¡Suscripción confirmada para ${nombre} (${correo})!`); 
+        } catch (error) {
+            alert('Error al inscribirse. Inténtalo de nuevo.'); 
+            console.error(error);
+        }
+    } else {
+        alert('Nombre y correo son obligatorios para la suscripción.'); 
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetchEvents(API_EVENTOS_ACTUALES, 'current-events');
-    fetchEvents(API_EVENTOS_PASADOS, 'past-events');
+    fetchEvents(API_EVENTOS_ACTUALES, 'current-events'); 
+    fetchEvents(API_EVENTOS_PASADOS, 'past-events'); 
 });
