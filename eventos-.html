@@ -47,10 +47,8 @@
     
         function renderEvents(eventData, containerId) {
             const container = document.getElementById(containerId);
-            container.innerHTML = ''; 
-            count = 0;
+            container.innerHTML = '';
             eventData.forEach(event => {
-                count++;
                 const eventItem = document.createElement('div');
                 eventItem.classList.add('card');
                 eventItem.style.backgroundImage = `url(${event.imagen})`; 
@@ -62,9 +60,10 @@
                         <p><strong>PLATAFORMA:</strong> ${event.ubicacion}</p>
                     </div>
                     <div class="button-container">
-                        <a href="eventos2.html?id=${count}" class="btn">Suscribirse</a>
+                        <a href="eventos2.html?id=${event.id}" class="btn subscribe-button">Suscribirse</a>
                     </div>
                 `;
+                console.log(event.id);
                 container.appendChild(eventItem);
             });
         }
