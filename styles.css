@@ -460,29 +460,53 @@ p {
   flex-direction: column;
 }
 .event-banner {
-  background-image: url('./images/ciberseguridad.jpg');
+  position: relative; 
   background-size: cover;
   background-position: center;
   padding: 40px 20px;
   color: white;
   text-align: center;
-  width: 100%;
-  position: relative;
-  border-radius: 15px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   margin-bottom: 20px;
 }
+
+.event-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+  border-radius: 10px; 
+}
+
+.event-banner > * {
+  position: relative;
+  z-index: 2;
+}
+
+.event-banner h2 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
 .event-description {
   margin: 0;
-  padding: 70px;
+  padding: 70px; 
   background-color: #d5eeff;
   border-radius: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   color: black;
+  position: relative; 
+  z-index: 2; 
 }
 .event-info-text {
-  color: #2F3A89; 
+  font-size: 1.2em;
 }
+
 .principal-title {
   margin-bottom: 20px;
 }
