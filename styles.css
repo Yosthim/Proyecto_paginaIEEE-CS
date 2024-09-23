@@ -2,9 +2,9 @@
 
 :root {
   --clr-primary: #293b3a;
-  --clr-background: #151D55;
+  --clr-background: #def4facb;
   --clr-card: #A9DBFF;
-  --clr-button: #F7D272;
+  --clr-button: #9e8a54;
   --clr-title: #3FABE7;
 }
 
@@ -25,8 +25,12 @@ body {
   width: 100%;
   min-height: 100vh;
   background: var(--clr-background);
-  color: #fff;
+  color: #000000;
   overflow-x: hidden;
+}
+
+.content {
+  padding-top: 73px;
 }
 
 .logo {
@@ -35,8 +39,14 @@ body {
   gap: 13px;
 }
 
+.logo img {
+  width: 120px;
+  height: auto;
+}
+
 .separator {
   border-left: 1px solid #fff;
+  height: 40px;
 }
 
 .title {
@@ -50,6 +60,7 @@ body {
 
 .logo-text {
   padding-top: 2px;
+  color: #fff;
 }
 
 .container {
@@ -67,22 +78,104 @@ body {
 }
 
 .menu {
-  padding: 30px 0;
-}
+  padding: 25px 0;
+  background: rgba(0, 0, 0, 0.884);
+  width: 100%;
+  position: fixed;
+  z-index: 10;}
 
 .menu .container {
   justify-content: space-between;
 }
 
+.nav-menu {
+  display: flex;
+  list-style-type: none;
+}
+
 .nav-item { 
-  list-style: none;
-  display: inline-block;
-  margin-right: 30px;
+  margin-right: 20px;
 }
 
 .nav-item a {
   text-decoration: none;
   color: #fff;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1rem;
+  display: block;
+  padding: 10px;
+}
+
+.nav-item:hover {
+  background: #5355b867;
+}
+
+.menu-toggle {
+  display: none;
+  cursor: pointer;
+}
+
+.bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px auto;
+  transition: all 0.3s ease-in-out;
+  background-color: white;
+}
+
+@media screen and (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-menu {
+    position: fixed;
+    left: -100%;
+    top: 5rem;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.884);
+    width: 100%;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+  }
+
+  .nav-menu.active {
+    left: 0;
+  }
+
+  .nav-item {
+    margin: 2.5rem 0;
+  }
+
+  .menu-toggle.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .menu-toggle.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  .logo img {
+    width: 80px;
+  }
+
+  .title {
+    font-size: 10px;
+  }
+
+  .subtitle {
+    font-size: 8px;
+  }
 }
 
 .principal-title {
@@ -93,6 +186,7 @@ body {
   text-shadow: -1px 4px 4px rgba(0, 0, 0, 0.356);
   justify-content: center;
   text-align: center;
+  color: white;
 }
 
 .title-separator {
@@ -105,7 +199,7 @@ body {
 
 .title-separator:before,
 .title-separator:after {
-  background-color: #ffffff;
+  background-color: #000000;
   content: "";
   display: inline-block;
   height: 1.5px;
@@ -220,6 +314,11 @@ a.btn {
   .large-item {
     grid-column: span 2;
   }
+
+  .container {
+    width: 90%;
+  }
+
 }
 
 @media (max-width: 768px) {
@@ -235,6 +334,16 @@ a.btn {
   .large-item img,
   .large-item .text {
     width: 100%;
+  }
+
+  .container {
+    width: 95%;
+  }
+  .new-section .new {
+    width: 90%;
+  }
+  .comment-section {
+    padding: 20px;
   }
 }
 
@@ -272,18 +381,20 @@ a.btn {
 hr {
   margin: 16px 0;
   width: 100%;
-  border: 1px solid #3face79f;
+  border: 1px solid #3face7d0;
 }
 
 .new-body {
   flex-direction: column;
   gap: 18px;
+  align-items: flex-start;
 }
 
 .new-image {
-  width: 40%;
+  width: 50%;
   height: auto;
-  padding-right: 45px;
+  margin: auto;
+  padding: 10px 0;
 }
 
 .section-title {
@@ -295,7 +406,7 @@ hr {
 }
 
 .comment-section {
-  background-color: #3681ab;
+  background-color: #1f5c8091;
   border-radius: 10px;
   padding: 40px 100px;
   width: 90%;
@@ -376,6 +487,22 @@ hr {
     width: 95%;
   }
 }
+
+button.btn {
+  margin: auto;
+  padding: 10px;
+  background-color: #293b3a;
+  color: white;
+}
+
+.first-comment {
+  flex-direction: column;
+}
+
+.first-comment .comment {
+  width: 100%;
+}
+
 .card-container {
   display: flex;
   flex-direction: column; 
@@ -424,7 +551,7 @@ hr {
 }
 h2 {
   font-size: 1.8rem;
-  margin-bottom: 30px;
+  /*margin-bottom: 30px;*/
   overflow-wrap: break-word;
 }
 p {
