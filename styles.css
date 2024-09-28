@@ -2,9 +2,9 @@
 
 :root {
   --clr-primary: #293b3a;
-  --clr-background: #def4facb;
+  --clr-background: #151c55ee;
   --clr-card: #A9DBFF;
-  --clr-button: #9e8a54;
+  --clr-button: #F7D272;
   --clr-title: #3FABE7;
 }
 
@@ -25,12 +25,12 @@ body {
   width: 100%;
   min-height: 100vh;
   background: var(--clr-background);
-  color: #000000;
+  color: #151c55ee;
   overflow-x: hidden;
 }
 
 .content {
-  padding-top: 73px;
+  padding-top: 90px;
 }
 
 .logo {
@@ -79,7 +79,7 @@ body {
 
 .menu {
   padding: 25px 0;
-  background: rgba(0, 0, 0, 0.884);
+  background: #151D55;
   width: 100%;
   position: fixed;
   z-index: 10;}
@@ -111,7 +111,7 @@ body {
 }
 
 .nav-item:hover {
-  background: #5355b867;
+  background: #5355b8a4;
 }
 
 .menu-toggle {
@@ -199,7 +199,7 @@ body {
 
 .title-separator:before,
 .title-separator:after {
-  background-color: #000000;
+  background-color: #ffffff;
   content: "";
   display: inline-block;
   height: 1.5px;

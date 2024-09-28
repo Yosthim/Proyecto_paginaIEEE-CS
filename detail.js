@@ -88,7 +88,7 @@ function renderComments(comments) {
         commentItem.classList.add('comment');
         commentItem.innerHTML = `
             <img src="/images/user1.png" alt="User Avatar">
-            <p class="comment-content"><strong>${comment.name}:</strong> ${comment.source}</p>
+            <p class="comment-content"><strong>Usuario:</strong> ${comment.source}</p>
         `;
         commentsContainer.appendChild(commentItem);
     });
@@ -102,7 +102,7 @@ function addComment(event) {
     
     commentItem.innerHTML = `
         <img src="/images/user1.png" alt="User Avatar">
-        <p class="comment-content"><strong>${comment}:</strong> ${commentText}</p>
+        <p class="comment-content"><strong>Usuario:</strong> ${commentText}</p>
     `;
     
     const commentsList = document.getElementById('comments-list');
