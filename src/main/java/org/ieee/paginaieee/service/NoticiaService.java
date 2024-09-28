@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.ieee.paginaieee.dto.NoticiaListaDTO;
 import org.ieee.paginaieee.dto.NoticiaDetalleDTO;
-import org.ieee.paginaieee.dto.ComentarioDTO;
 import org.ieee.paginaieee.entity.Noticia;
 import org.ieee.paginaieee.repository.NoticiaRepository;
 
@@ -33,22 +32,42 @@ public class NoticiaService {
 
         NoticiaDetalleDTO dto = new NoticiaDetalleDTO();
         dto.setTitle(noticia.getTitulo());
-        dto.setTema(noticia.getTema());
-        dto.setSource(noticia.getContenido());
-        dto.setDetails(noticia.getDetalles());
-        dto.setDetailsContent(noticia.getDetallesContent());
-        dto.setAditional(noticia.getAdicional());
-        dto.setContextAditional(noticia.getContextAdicional());
+        dto.setCategory(noticia.getCategoria());
+        dto.setAutor(noticia.getAutor());
+        dto.setSource(noticia.getFuente());
+        dto.setContent(noticia.getContenido());
         dto.setImg(noticia.getImagen());
-        dto.setSourceLink(noticia.getSourceLink());
         dto.setDate(noticia.getFechaDePublicacion());
-        dto.setComment(noticia.getComentarios().stream().map(comentario -> {
-            ComentarioDTO comentarioDTO = new ComentarioDTO();
-            comentarioDTO.setSource(comentario.getContenido());
-            comentarioDTO.setName(comentario.getNombre());
-            return comentarioDTO;
-        }).collect(Collectors.toList()));
 
         return dto;
+    }
+
+    // Guardar una nueva noticia
+    public void guardarNoticia(NoticiaDetalleDTO noticiaDTO) {
+        Noticia noticia = new Noticia();
+        noticia.setTitulo(noticiaDTO.getTitle());
+        noticia.setCategoria(noticiaDTO.getCategory());
+        noticia.setAutor(noticiaDTO.getAutor());
+        noticia.setFuente(noticiaDTO.getSource());
+        noticia.setContenido(noticiaDTO.getContent());
+        noticia.setImagen(noticiaDTO.getImg());
+        noticia.setFechaDePublicacion(noticiaDTO.getDate());
+
+        noticiaRepository.save(noticia);
+    }
+
+    // Método para actualizar una noticia existente
+    public void actualizarNoticia(Long id, NoticiaDetalleDTO noticiaDTO) {
+        Noticia noticia = noticiaRepository.findById(id).orElseThrow(() -> new RuntimeException("Noticia no encontrada"));
+
+        noticia.setTitulo(noticiaDTO.getTitle());
+        noticia.setCategoria(noticiaDTO.getCategory());
+        noticia.setAutor(noticiaDTO.getAutor());
+        noticia.setFuente(noticiaDTO.getSource());
+        noticia.setContenido(noticiaDTO.getContent());
+        noticia.setImagen(noticiaDTO.getImg());
+        noticia.setFechaDePublicacion(noticiaDTO.getDate());
+
+        noticiaRepository.save(noticia);
     }
 }

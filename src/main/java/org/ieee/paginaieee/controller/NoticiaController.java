@@ -34,4 +34,18 @@ public class NoticiaController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
+
+    // Endpoint para guardar una nueva noticia
+    @PostMapping
+    public ResponseEntity<Void> guardarNoticia(@RequestBody NoticiaDetalleDTO noticiaDTO) {
+        noticiaService.guardarNoticia(noticiaDTO);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    // Endpoint para actualizar una noticia existente
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> actualizarNoticia(@PathVariable Long id, @RequestBody NoticiaDetalleDTO noticiaDTO) {
+        noticiaService.actualizarNoticia(id, noticiaDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
