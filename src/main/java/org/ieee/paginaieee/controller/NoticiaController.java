@@ -48,4 +48,11 @@ public class NoticiaController {
         noticiaService.actualizarNoticia(id, noticiaDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    // Endpoint para cambiar el status de una noticia
+    @PutMapping("/status/{id}")
+    public ResponseEntity<Void> cambiarStatus(@PathVariable Long id, @RequestParam String status) {
+        noticiaService.cambiarStatus(id, status);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -9,4 +9,6 @@ public class NoticiaListaDTO {
     private String title;
     private String img;
     private Date date;
+    private String category;
+    private String status;
 }
