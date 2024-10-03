@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const newsData = await response.json(); 
         renderNewsDetail(newsData); 
-        renderComments(newsData.comment); 
+        /*renderComments(newsData.comment); */
     } catch (error) {
         console.error(error);
         document.getElementById('news-detail').innerHTML = '<p>Error al cargar la noticia.</p>';
@@ -44,6 +44,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function renderNewsDetail(news) {
     const detailContainer = document.getElementById('news-detail');
+
+    // Construct the full image URL
+    const imageUrl = news.img ? `https://pj4ld9fn-8080.brs.devtunnels.ms/api/noticias/${news.id}/${news.img}` : '/images/prueba.png'; 
+
     detailContainer.innerHTML = `
         <div class="new">
             <div class="principal-title flex">
@@ -51,29 +55,22 @@ function renderNewsDetail(news) {
             </div>
             <div class="new-content flex">
                 <div class="new-header flex black space-between">
-                    <h3>${news.tema}</h3>
+                    <h3>${news.autor}</h3>
                     <h3>${news.date}</h3>
                 </div>
                 <hr></hr>
                 <div class="new-body black flex">
-                    <p>${news.source}</p>
-                    <div>
-                        <h3 class="section-title text-left">${news.details}</h3>
-                        <p>${news.detailsContent}</p>
-                    </div>         
-                    <div>             
-                        <h3 class="section-title text-left">${news.aditional}</h3>
-                        <p>${news.contextAditional}</p>                        
-                    </div>
-                    <img class="new-image" src="${news.img}" alt="${news.title}">
+                    <p>${news.content}</p>
+                    <img class="new-image" src="${imageUrl}" alt="${news.title}">
                 </div>
                 <hr>
-                <p class="source"><b>Fuente:</b> ${news.sourceLink}</p>
+                <p class="source"><b>Fuente:</b> ${news.source}</p>
             </div>
         </div>
     `;
 }
 
+/*
 
 function renderComments(comments) {
     const commentsContainer = document.getElementById('comments-list');
@@ -94,6 +91,7 @@ function renderComments(comments) {
     });
 }
 
+
 function addComment(event) {
     event.preventDefault(); 
     const commentText = document.getElementById('comment-text').value; 
@@ -110,3 +108,4 @@ function addComment(event) {
     
     document.getElementById('comment-text').value = '';
 }
+*/
