@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creación de noticia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script defer src="manage-new.js"></script> 
+</head>
+<body>
+    <nav class="menu">
+        <div class="flex container">
+            <div class="logo">
+                <img src="./images/logo.png" alt="Logo IEEE" width="120px">
+                <h1 class="separator"></h1>
+                <div class="logo-text">
+                    <p class="title">Universidad Nacional Mayor de San Marcos</p>
+                    <p class="subtitle">IEEE Student Branch</p>
+                </div>
+            </div>
+
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="manage-news.html" class="nav-link">Gestión de Noticias</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Gestión de Eventos</a></li>
+                <a href="#" class="action-button">
+                    <i class="material-symbols-outlined">account_circle</i>
+                </a> 
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="admin-title flex">
+            <h1>ADMIN PANEL</h1>
+        </div>
+        <div id="news-detail" class="new-section flex column">
+            <div class="add-icon">
+                <a href="manage-news.html" class="left">
+                    <i class="material-symbols-outlined">arrow_back</i>
+                </a>
+            </div>
+            <div class="create-new">
+                <h2>Nueva noticia</h2>
+                <hr>
+                <div class="new-create-content">
+                    <form id="newsForm">
+                        <div class="form-group">
+                            <label for="title">Título noticia</label>
+                            <input type="text" id="title" name="title" placeholder="Título noticia" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Categoría</label>
+                            <input type="text" id="category" name="category" placeholder="Temática" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="autor">Autor</label>
+                                <input type="text" id="autor" name="autor" placeholder="Autor" required>
+                            </div>
+                            <div class="form-group half">
+                                <label for="source">Fuente</label>
+                                <input type="text" id="source" name="source" placeholder="Fuente" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="content">Contenido</label>
+                            <textarea id="content" name="content" placeholder="Contenido" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Imagen</label>
+                            <button type="button" class="upload-btn">Subir archivo</button>
+                            <input type="file" id="image" name="image" hidden>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <button type="submit" form="newsForm" class="save-button">Guardar</button>
+        </div>
+    </div>
+
+    <div id="creation-modal">
+        <div class="window">
+            <p>Se ha creado la noticia</p>
+            <button id="acceptCreationBtn">Aceptar</button>
+        </div>
+    </div>
+</body>
+</html>

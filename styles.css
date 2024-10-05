@@ -178,7 +178,8 @@ body {
   }
 }
 
-.principal-title {
+.principal-title,
+.admin-title {
   padding: 20px;
   font-weight: lighter;
   background-color: var(--clr-title);
@@ -352,10 +353,11 @@ a.btn {
   padding-top: 60px;
 }
 
-.new-section .new {
+.new-section .new,
+.new-section .create-new {
   width: 70%;
   height: auto;
-  background-color: #ffffff;
+  background-color: #E6F5FF;
   border-radius: 8px;
   padding: 50px 0;
 }
@@ -711,211 +713,4 @@ input[type="text"]:focus, input[type="email"]:focus {
   background-color: #e3b04b;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
 }
-
-/* Gestion de eventos */
-
-.second-title {
-  padding: 20px;
-  font-weight: lighter;
-  background-color: #EFB968;
-  font-size: 20px;
-  text-shadow: -1px 4px 4px rgba(0, 0, 0, 0.356);
-  justify-content: center;
-  text-align: center;
-  color: white;
-  margin-bottom: 30px; 
-}
-/* Contenedor principal */
-.table-container {
-  background-color: #F0F5FF;
-  border-radius: 20px;
-  padding: 30px;
-  width: 900px; 
-  max-width: 100%;
-  margin: 0 auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilo del encabezado */
-.table-header {
-  font-size: 28px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
-  color: #3e5ebc;
-}
-
-/* Tabla de eventos */
-.tabla-eventos {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 10px; /* Separación entre filas */
-}
-/* Centramos los títulos de los encabezados */
-.tabla-eventos th {
-  text-align: center;
-  padding: 15px;
-  background-color: #2F54EB;
-  color: white;
-  font-weight: bold;
-}
-
-/* Encabezados */
-thead {
-  background-color: white;
-}
-
-thead th {
-  background-color: #3e5ebc;
-  color: white;
-  padding: 15px;
-  text-align: left;
-  font-size: 16px;
-}
-
-/* Filas del cuerpo */
-tbody tr {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
-}
-
-tbody td {
-  padding: 15px;
-  text-align: left;
-  font-size: 14px;
-}
-
-tbody tr:hover {
-  background-color: #f1f3f5;
-}
-
-/* Estilo de las acciones */
-.table-actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-}
-
-.table-actions button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  padding: 8px;
-}
-
-button.edit {
-  color: #ffcc00;
-}
-
-button.view {
-  color: #32a852;
-}
-
-button.delete {
-  color: #ff3b3b;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-/* Pie de tabla */
-.table-footer {
-  text-align: center;
-  padding: 10px;
-  font-size: 14px;
-  color: #555;
-  background-color: #f3f7ff;
-  border-radius: 0 0 10px 10px;
-}
-/*Crear y editar evento*/
-/* Estilos del formulario de "Nuevo evento" */
-.formulario-evento {
-  background-color: #E4F0FF;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: 900px; 
-  max-width: 100%;
-  margin: 0 auto;
-  max-width: 900px;
-}
-
-.formulario-evento h1 {
-  font-size: 2.5em;
-  color: #4E6DBF;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.formulario-evento input[type="text"],
-.formulario-evento input[type="date"],
-.formulario-evento input[type="time"],
-.formulario-evento textarea {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1.2em;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.formulario-evento input[type="file"] {
-  margin-bottom: 20px;
-}
-
-.formulario-evento .input-corto {
-  width: 30%;
-}
-
-.formulario-evento .input-corto + .input-corto {
-  margin-left: 10px;
-}
-
-.formulario-evento textarea {
-  height: 150px;
-  resize: none;
-}
-
-.formulario-evento .boton-guardar {
-  background-color:  #F7D272;
-  color: white;
-  font-size: 1.2em;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  display: block;
-  margin: 0 auto;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease;
-}
-
-.formulario-evento .boton-guardar:hover {
-  background-color: #FFA500;
-}
-
-.formulario-evento label {
-  font-weight: bold;
-  font-size: 1.1em;
-  color: #4E6DBF;
-  display: block;
-  margin-bottom: 8px;
-}
-
-/* Alineación de los campos de fecha, hora y ubicación */
-.formulario-evento .fila {
-  display: flex;
-  justify-content: space-between;
-}
-
-.formulario-evento .fila .input-corto {
-  width: 30%;
-}
-
 
