@@ -1,4 +1,4 @@
-const API_URL = 'https://pj4ld9fn-8080.brs.devtunnels.ms/api';
+const API_URL = 'https://jwwk1hxf-8080.brs.devtunnels.ms/api/eventos';
 
 async function loadEventForEdit(id) {
     try {
@@ -44,25 +44,24 @@ function populateEditForm(event) {
 
 async function updateEvent(eventData) {
     try {
-        console.log("Attempting to update event with data:", eventData); 
-        const response = await fetch(`${API_URL}/eventos/${eventData.id}`, {
-            method: 'PUT',
+        const response = await fetch(`${API_URL}/${eventData.id}`, {
+            method: 'PUT', // Llamada PUT para actualizar un evento existente
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(eventData),
+            body: JSON.stringify(eventData), // Convierte los datos del evento a formato JSON
         });
         if (response.ok) {
-            showEditConfirmationModal();
+            alert('Evento actualizado exitosamente');
+            window.location.href = 'manage-events.html'; // Redirige después de actualizar el evento
         } else {
             throw new Error('Error al actualizar el evento');
         }
     } catch (error) {
         console.error('Error al actualizar el evento:', error);
-        alert('No se pudo actualizar el evento. Por favor, intenta de nuevo más tarde.');
+        alert('No se pudo actualizar el evento. Intente nuevamente más tarde.');
     }
 }
-
 function showEditConfirmationModal() {
     const editModal = document.getElementById('edit-modal');
     if (editModal) {

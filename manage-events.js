@@ -1,4 +1,4 @@
-const API_URL = 'https://pj4ld9fn-8080.brs.devtunnels.ms/api';
+const API_URL = 'https://jwwk1hxf-8080.brs.devtunnels.ms/api/eventos';
 
 async function loadEvents(filter = '') {
     try {
@@ -26,18 +26,17 @@ function displayEvents(events) {
             const row = `
                 <tr>
                     <td>${item.id}</td>
-                    <td>${item.date}</td>
-                    <td>${item.category}</td>
-                    <td>${item.title}</td>
-                    <td>${item.location}</td>
+                    <td>${item.fecha}</td>
+                    <td>${item.categoria}</td>
+                    <td>${item.nombre}</td>
                     <td>    
-                        <a href="modify-event.html?id=${item.id}" class="edit">
+                        <a href="modify-new.html?id=${item.id}" class="edit">
                             <i class="material-symbols-outlined">edit</i>
                         </a>
-                        <a href="view-event.html?id=${item.id}" class="view" data-id="${item.id}">
+                        <a href="view-new.html?id=${item.id}" class="view" data-id="${item.id}">
                             <i class="material-symbols-outlined">visibility</i>
                         </a>
-                        <a href="#" class="delete" data-id="${item.id}" data-title="${item.title}">
+                        <a href="#" class="delete" data-id="${item.id}" data-title="${item.nombre}">
                             <i class="material-symbols-outlined">delete</i>
                         </a>
                     </td>
@@ -157,20 +156,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const title = document.getElementById('title')?.value;
             const category = document.getElementById('category')?.value;
-            const date = document.getElementById('date')?.value;
-            const time = document.getElementById('time')?.value;
-            const location = document.getElementById('location')?.value;
-            const description = document.getElementById('content')?.value;
+            const autor = document.getElementById('autor')?.value;
+            const source = document.getElementById('source')?.value;
+            const content = document.getElementById('content')?.value;
             const img = document.getElementById('image')?.files[0];
+            const date = new Date().toISOString();
 
             const eventData = {
                 title,
                 category,
-                date,
-                time,
-                location,
-                description,
-                img: img ? img.name : ''
+                autor,
+                source,
+                content,
+                img: img ? img.name : '',
+                date
             };
 
             createEvent(eventData);
