@@ -1,18 +1,38 @@
 const API_URL = 'https://pj4ld9fn-8080.brs.devtunnels.ms/api';
 
-async function loadNews(filter = '') {
+async function loadNews() {
     try {
-        const response = await fetch(`${API_URL}/noticias${filter}`);
+        const response = await fetch(`${API_URL}/noticias`);
         if (!response.ok) {
             throw new Error('Error al obtener las noticias');
         }
         const news = await response.json();
         console.log('Noticias cargadas:', news);
-        displayNews(news);
+        filterAndDisplayNews(news);
     } catch (error) {
         console.error('Error al cargar las noticias:', error);
     }
 }
+
+function filterAndDisplayNews(news) {
+    const searchQuery = document.getElementById('searchInput')?.value.toLowerCase() || '';
+    const selectedDateOrder = document.getElementById('filterDate')?.value || 'none';
+
+    let filteredNews = [...news];
+
+    if (searchQuery) {
+        filteredNews = filteredNews.filter(item => item.title.toLowerCase().includes(searchQuery));
+    }
+
+    if (selectedDateOrder === 'dateDesc') {
+        filteredNews.sort((a, b) => new Date(b.date) - new Date(a.date)); // Más reciente primero
+    } else if (selectedDateOrder === 'dateAsc') {
+        filteredNews.sort((a, b) => new Date(a.date) - new Date(b.date)); // Más antiguo primero
+    }
+
+    displayNews(filteredNews);
+}
+
 
 function displayNews(news) {
     const tableBody = document.querySelector('table tbody');
@@ -21,6 +41,12 @@ function displayNews(news) {
         return;
     }
     tableBody.innerHTML = '';
+
+    if (news.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="5">No se encontraron noticias</td></tr>';
+        return;
+    }
+
     news.forEach(item => {
         if (item.status === 'Visible') {
             const row = `
@@ -185,14 +211,31 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    const returnBtn = document.getElementById('returnBtn');
+    
+    if (returnBtn) {
+        returnBtn.addEventListener('click', function() {
+            window.location.href = 'manage-news.html';  
+        });
+    }
+
+
     loadNews();
 
-    const filterSelect = document.getElementById('filt');
-    if (filterSelect) {
-        filterSelect.addEventListener('change', () => {
-            const filter = `?filter=${filterSelect.value}`;
-            loadNews(filter);
-        });
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', loadNews); 
+    }
+
+    const filterCategory = document.getElementById('filterCategory');
+    if (filterCategory) {
+        filterCategory.addEventListener('change', loadNews); 
+    }
+
+    const filterDate = document.getElementById('filterDate');
+    if (filterDate) {
+        filterDate.addEventListener('change', loadNews);
     }
 
     const table = document.querySelector('table');
@@ -211,9 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             e.preventDefault();
             const id = target.dataset.id;
-
            
-
             if (target.classList.contains('delete')) {
                 const title = target.dataset.title;
                 showDeleteConfirmationModal(id, title);

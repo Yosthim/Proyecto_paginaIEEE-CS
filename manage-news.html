@@ -41,17 +41,19 @@
         <div class="admin-title flex">
             <h1>ADMIN PANEL</h1>
         </div>
-    
         <div id="news-detail" class="new-section flex column">
             <div class="select-form">
-                <form action="#">
-                    <select name="filters" id="filt">
-                      <option value="date">Fecha</option>
-                      <option value="category">Categoría</option>
-                      <option value="title">Título</option>
-                    </select>
-                    <!--<input type="submit" value="Enviar" />-->
-              </form>
+                <input type="text" id="searchInput" placeholder="Buscar por título...">
+                <select id="filterDate" title="Ordenar por fecha">
+                    <option value="none">Ordenar por fecha</option>
+                    <option value="dateDesc">Más reciente</option>
+                    <option value="dateAsc">Más antiguo</option>
+                </select>
+            </div>
+            <div class="add-icon ">
+                <a href="create-new.html" class="add">
+                    <i class="material-symbols-outlined">add_circle</i>
+                </a>
             </div>
             <div class="create-new">
                 <h2>Noticias</h2>
@@ -71,11 +73,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="add-icon ">
-                <a href="create-new.html" class="add">
-                    <i class="material-symbols-outlined">add_circle</i>
-                </a>
             </div>
         </div>
     </div>

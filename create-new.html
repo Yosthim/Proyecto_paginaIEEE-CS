@@ -42,11 +42,6 @@
             <h1>ADMIN PANEL</h1>
         </div>
         <div id="news-detail" class="new-section flex column">
-            <div class="add-icon">
-                <a href="manage-news.html" class="left">
-                    <i class="material-symbols-outlined">arrow_back</i>
-                </a>
-            </div>
             <div class="create-new">
                 <h2>Nueva noticia</h2>
                 <hr>
@@ -82,7 +77,10 @@
                     </form>
                 </div>
             </div>
-            <button type="submit" form="newsForm" class="save-button">Guardar</button>
+            <div class="buttons">
+                <button type="submit" form="newsForm" class="save-button">Guardar</button>
+                <button id = "returnBtn" class="save-button">Cancelar</button>
+            </div> 
         </div>
     </div>
 
