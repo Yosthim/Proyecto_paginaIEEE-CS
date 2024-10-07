@@ -11,6 +11,7 @@ public class EventoDetalleDTO {
     private String descripcion;
     private LocalDate fecha;
     private LocalTime hora;
+    private Boolean visible;
     private String imagen;
     private String ubicacion;
 }

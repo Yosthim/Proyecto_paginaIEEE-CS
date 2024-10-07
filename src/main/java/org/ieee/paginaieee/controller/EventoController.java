@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -37,7 +38,30 @@ public class EventoController {
             eventoService.procesarEventoSuscripcion(id,suscripcionDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body("Suscripción creada exitosamente");
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Suscripcion duplicada");
+        }
+    }
+    //Endpoint para guardar el evento
+    @PostMapping
+    public ResponseEntity<Void> guardarEvento(@RequestBody EventoDetalleDTO eventoDetalleDTO){
+        eventoService.guardarEvento(eventoDetalleDTO);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    // Endpoint para actualizar un evento existente
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> actualizarEvento(@PathVariable Long id,@RequestBody EventoDetalleDTO eventoDetalleDTO){
+        eventoService.actualizarEvento(id, eventoDetalleDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    // Endpoint para actualizar solo el campo visible de un evento existente
+    @PatchMapping("/{id}/visible")
+    public ResponseEntity<Void> actualizarVisible(@PathVariable Long id, @RequestBody Map<String, Boolean> actualizacionVisible) {
+        try {
+            Boolean visible = actualizacionVisible.get("visible");
+            eventoService.actualizarCampoVisible(id, visible);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }
