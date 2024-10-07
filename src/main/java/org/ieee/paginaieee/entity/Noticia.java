@@ -17,9 +17,9 @@ public class Noticia {
     private String fuente;
     private String contenido;
     private String imagen;
+    private String status;
 
     @Temporal(TemporalType.DATE)
     private Date fechaDePublicacion;
 
-    private String status;
 }

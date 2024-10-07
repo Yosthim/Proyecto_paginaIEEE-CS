@@ -12,4 +12,5 @@ public class NoticiaDetalleDTO {
     private String content;
     private String img;
     private Date date;
+    private String status;
 }

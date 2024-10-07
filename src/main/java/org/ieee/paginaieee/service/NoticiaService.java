@@ -22,6 +22,8 @@ public class NoticiaService {
             dto.setTitle(noticia.getTitulo());
             dto.setImg(noticia.getImagen());
             dto.setDate(noticia.getFechaDePublicacion());
+            dto.setCategory(noticia.getCategoria());
+            dto.setStatus(noticia.getStatus());
             return dto;
         }).collect(Collectors.toList());
     }
@@ -38,6 +40,7 @@ public class NoticiaService {
         dto.setContent(noticia.getContenido());
         dto.setImg(noticia.getImagen());
         dto.setDate(noticia.getFechaDePublicacion());
+        dto.setStatus(noticia.getStatus());
 
         return dto;
     }
@@ -52,6 +55,7 @@ public class NoticiaService {
         noticia.setContenido(noticiaDTO.getContent());
         noticia.setImagen(noticiaDTO.getImg());
         noticia.setFechaDePublicacion(noticiaDTO.getDate());
+        noticia.setStatus("Visible");
 
         noticiaRepository.save(noticia);
     }
@@ -68,6 +72,13 @@ public class NoticiaService {
         noticia.setImagen(noticiaDTO.getImg());
         noticia.setFechaDePublicacion(noticiaDTO.getDate());
 
+        noticiaRepository.save(noticia);
+    }
+
+    // Método para cambiar el status de una noticia
+    public void cambiarStatus(Long id, String status) {
+        Noticia noticia = noticiaRepository.findById(id).orElseThrow(() -> new RuntimeException("Noticia no encontrada"));
+        noticia.setStatus(status);
         noticiaRepository.save(noticia);
     }
 }
