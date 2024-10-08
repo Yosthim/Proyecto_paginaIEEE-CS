@@ -15,6 +15,7 @@ public class Noticia {
     private String categoria;
     private String autor;
     private String fuente;
+    @Lob
     private String contenido;
     private String imagen;
     private String status;

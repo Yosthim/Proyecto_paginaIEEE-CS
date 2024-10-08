@@ -2,17 +2,23 @@ package org.ieee.paginaieee.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.ieee.paginaieee.dto.NoticiaListaDTO;
 import org.ieee.paginaieee.dto.NoticiaDetalleDTO;
 import org.ieee.paginaieee.entity.Noticia;
 import org.ieee.paginaieee.repository.NoticiaRepository;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class NoticiaService {
     @Autowired
     private NoticiaRepository noticiaRepository;
+
+    @Autowired
+    private ImageService imageService;
 
     // Obtener todas las noticias (solo imagen, título, fecha)
     public List<NoticiaListaDTO> obtenerTodasLasNoticias() {
@@ -61,15 +67,19 @@ public class NoticiaService {
     }
 
     // Método para actualizar una noticia existente
-    public void actualizarNoticia(Long id, NoticiaDetalleDTO noticiaDTO) {
+    public void actualizarNoticia(Long id, NoticiaDetalleDTO noticiaDTO, MultipartFile nuevaImagen) throws IOException {
         Noticia noticia = noticiaRepository.findById(id).orElseThrow(() -> new RuntimeException("Noticia no encontrada"));
+
+        if (nuevaImagen != null && !nuevaImagen.isEmpty()) {
+            String nuevaImagenUrl = imageService.replaceImage(noticia.getImagen(), nuevaImagen);
+            noticia.setImagen(nuevaImagenUrl);
+        }
 
         noticia.setTitulo(noticiaDTO.getTitle());
         noticia.setCategoria(noticiaDTO.getCategory());
         noticia.setAutor(noticiaDTO.getAutor());
         noticia.setFuente(noticiaDTO.getSource());
         noticia.setContenido(noticiaDTO.getContent());
-        noticia.setImagen(noticiaDTO.getImg());
         noticia.setFechaDePublicacion(noticiaDTO.getDate());
 
         noticiaRepository.save(noticia);
