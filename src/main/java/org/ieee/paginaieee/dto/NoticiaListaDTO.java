@@ -5,7 +5,10 @@ import java.util.Date;
 
 @Data
 public class NoticiaListaDTO {
-    private String titulo;
-    private String imagen;
-    private Date fechaDePublicacion;
+    private Long id;
+    private String title;
+    private String img;
+    private Date date;
+    private String category;
+    private String status;
 }

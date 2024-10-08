@@ -2,14 +2,15 @@ package org.ieee.paginaieee.dto;
 
 import lombok.Data;
 import java.util.Date;
-import java.util.List;
 
 @Data
 public class NoticiaDetalleDTO {
-    private String titulo;
-    private String contenido;
-    private String imagen;
+    private String title;
+    private String category;
     private String autor;
-    private Date fechaDePublicacion;
-    private List<ComentarioDTO> comentarios;
+    private String source;
+    private String content;
+    private String img;
+    private Date date;
+    private String status;
 }
