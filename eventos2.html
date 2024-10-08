@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IEEE CS - Noticias</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="menu">
+        <div class="container flex">
+            <div class="logo">
+                <img src="./images/logo.png" alt="Logo IEEE" width="120px">
+                <h1 class="separator"></h1>
+                <div class="logo-text">
+                    <p class="title">Universidad Nacional Mayor de San Marcos</p>
+                    <p class="subtitle">IEEE Student Branch</p>
+                </div>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#" class="nav-link">Inicio</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">¿Quiénes somos?</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">Noticias</a></li>
+                <li class="nav-item"><a href="eventos-.html" class="nav-link">Eventos</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="principal-title flex">
+            <h1>Detalles del Evento</h1>
+        </div>
+
+        <div class="section-event-detail" id="event-detail"></div>
+
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventId = urlParams.get('id');
+            const API_EVENTO = `https://jwwk1hxf-8080.brs.devtunnels.ms/api/eventos/${eventId}`;
+            const API_SUSCRIPCION = `https://jwwk1hxf-8080.brs.devtunnels.ms/api/eventos/${eventId}/suscripcion`;
+
+            async function fetchEvent() {
+                try {
+                    const response = await fetch(API_EVENTO);
+                    if (!response.ok) throw new Error('Error en la solicitud');
+                    const event = await response.json();
+                    renderEvent(event);
+                } catch (error) {
+                    document.getElementById('event-detail').innerHTML = '<p>Error al cargar los detalles del evento.</p>';
+                    console.error(error);
+                }
+            }
+
+            function renderEvent(event) {
+                const eventDetailContainer = document.getElementById('event-detail');
+                eventDetailContainer.innerHTML = `
+                <section class="section-event-detail">
+                    <div class="event-banner" style="background-image: url(${event.imagen});">
+                        <h2>${event.nombre}</h2>
+                        <p class="event-info-text"><strong>Fecha:</strong> ${event.fecha}</p>
+                        <p class="event-info-text"><strong>Hora:</strong> ${event.hora}</p>
+                        <p class="event-info-text"><strong>Plataforma:</strong> ${event.ubicacion}</p>
+                    </div>
+                    <div class="event-description">
+                        <p>${event.descripcion}</p>
+                    </div>
+                    <div style="margin-bottom: 20px;"></div>
+                </section>
+                <section class="section-inscription">
+                    <h2>Inscríbete al evento</h2>
+                    <form class="inscription-form">
+                        <div class="form-group">
+                            <div>
+                                <label for="usuario">Nombre</label>
+                                <input type="text" id="usuario" name="name" placeholder="Tu nombre" required>
+                            </div>
+                            <div>
+                                <label for="email">Correo electrónico</label>
+                                <input type="email" id="email" name="email" placeholder="Tu correo" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-inscripcion">Inscribirse</button>
+                    </form>
+                </section>
+            `;
+
+                document.querySelector('.inscription-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const usuario = document.getElementById('usuario').value;
+                    const email = document.getElementById('email').value;
+
+                    try {
+                        const response = await fetch(API_SUSCRIPCION, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ nombre: usuario, correo: email })
+                        });
+
+                        if (!response.ok) throw new Error('Error al inscribirse');
+
+                        alert(`¡Inscripción confirmada para ${usuario} (${email}) al evento!`);
+                    } catch (error) {
+                        alert('Error al inscribirse. Inténtalo de nuevo.');
+                        console.error(error);
+                    }
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', fetchEvent);
+        </script>
+</body>
+
+</html>

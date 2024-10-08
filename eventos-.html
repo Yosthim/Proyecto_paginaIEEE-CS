@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IEEE CS - Noticias</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="menu">
+        <div class="container flex">
+            <div class="logo">
+                <img src="./images/logo.png" alt="Logo IEEE" width="120px">
+                <h1 class="separator"></h1>
+                <div class="logo-text">
+                    <p class="title">Universidad Nacional Mayor de San Marcos</p>
+                    <p class="subtitle">IEEE Student Branch</p>
+                </div>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#" class="nav-link">Inicio</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">¿Quiénes somos?</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">Noticias</a></li>
+                <li class="nav-item"><a href="eventos-.html" class="nav-link">Eventos</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="principal-title flex">
+            <h1>Eventos</h1>
+        </div>
+    
+    <div class="section novedades-section">
+        <p class="title-separator">Actuales</p>
+        <div class="card-container" id="current-events"></div>
+    </div>
+
+    <div class="section tecnologia-section">
+        <p class="title-separator">Pasados</p>
+        <div class="card-container" id="past-events"></div>            
+    </div>
+
+    <script>
+        const API_EVENTOS = 'https://jwwk1hxf-8080.brs.devtunnels.ms/api/eventos';
+    
+        function renderEvents(eventData, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            eventData.forEach(event => {
+                const eventItem = document.createElement('div');
+                eventItem.classList.add('card');
+                eventItem.style.backgroundImage = `url(${event.imagen})`; 
+                eventItem.innerHTML = `
+                    <div class="text-container">
+                        <h2>${event.nombre}</h2>
+                        <p><strong>FECHA:</strong> ${event.fecha}</p>
+                        <p><strong>HORA:</strong> ${event.hora}</p>
+                        <p><strong>PLATAFORMA:</strong> ${event.ubicacion}</p>
+                    </div>
+                    <div class="button-container">
+                        <a href="eventos2.html?id=${event.id}" class="btn subscribe-button">Suscribirse</a>
+                    </div>
+                `;
+                console.log(event.id);
+                container.appendChild(eventItem);
+            });
+        }
+    
+        function showLoading(containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '<p class="loading-message">Cargando eventos...</p>';
+        }
+    
+        function renderError(containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '<p class="error-message">Error al cargar los eventos.</p>';
+        }
+    
+        function filterEvents(eventData) {
+            const now = new Date();
+            const eventosActuales = [];
+            const eventosPasados = [];
+    
+            eventData.forEach(event => {
+                const eventDate = new Date(`${event.fecha}T${event.hora}`);
+    
+                if (eventDate > now) {
+                    eventosActuales.push(event);
+                } else {
+                    eventosPasados.push(event);
+                }
+            });
+    
+            return { eventosActuales, eventosPasados };
+        }
+    
+        async function fetchEvents(apiUrl) {
+            try {
+                showLoading('current-events');
+                showLoading('past-events');
+                const response = await fetch(apiUrl); 
+                if (!response.ok) throw new Error('Error en la solicitud');
+                const data = await response.json(); 
+    
+                const { eventosActuales, eventosPasados } = filterEvents(data);
+    
+                renderEvents(eventosActuales, 'current-events');
+                renderEvents(eventosPasados, 'past-events');
+    
+            } catch (error) {
+                console.error(error);
+                renderError('current-events');
+                renderError('past-events');
+            }
+        }
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchEvents(API_EVENTOS);
+        });
+    </script>
+
+</body>
+</html>
