@@ -19,6 +19,7 @@ public class Evento {
     private String descripcion;
     private String ubicacion;
     private String imagen;
+    private Boolean visible;
     private LocalDate fecha;
     private LocalTime hora;
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)

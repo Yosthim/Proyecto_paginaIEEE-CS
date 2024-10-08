@@ -2,8 +2,10 @@ package org.ieee.paginaieee.service;
 
 import org.ieee.paginaieee.dto.EventoDetalleDTO;
 import org.ieee.paginaieee.dto.EventoListaDTO;
+import org.ieee.paginaieee.dto.NoticiaDetalleDTO;
 import org.ieee.paginaieee.dto.SuscripcionDTO;
 import org.ieee.paginaieee.entity.Evento;
+import org.ieee.paginaieee.entity.Noticia;
 import org.ieee.paginaieee.repository.EventoRepository;
 import org.ieee.paginaieee.repository.SuscripcionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,7 @@ public class EventoService {
         eventoDetalle.setFecha(evento.getFecha());
         eventoDetalle.setHora(evento.getHora());
         eventoDetalle.setImagen(evento.getImagen());
+        eventoDetalle.setVisible(evento.getVisible());
         eventoDetalle.setUbicacion(evento.getUbicacion());
        return eventoDetalle;
     }
@@ -69,5 +72,38 @@ public class EventoService {
             throw new RuntimeException("Correo ya suscrito a este evento");
         }
     }
+    // Guardar nuevo evento
+    public void guardarEvento(EventoDetalleDTO eventoDetalleDTO) {
+        Noticia noticia = new Noticia();
+        Evento evento= new Evento();
+        evento.setNombre(eventoDetalleDTO.getNombre());
+        evento.setDescripcion(eventoDetalleDTO.getDescripcion());
+        evento.setFecha(eventoDetalleDTO.getFecha());
+        evento.setHora(eventoDetalleDTO.getHora());
+        evento.setVisible(eventoDetalleDTO.getVisible());
+        evento.setImagen(eventoDetalleDTO.getImagen());
+        evento.setUbicacion(eventoDetalleDTO.getUbicacion());
+        eventoRepository.save(evento);
+    }
+    //Metodo para actualizar un evento
+    public void actualizarEvento(Long id, EventoDetalleDTO eventoDetalleDTO) {
+        Evento evento= eventoRepository.findById(id).orElseThrow(() -> new RuntimeException("Evento no encontrado"));
+        evento.setNombre(eventoDetalleDTO.getNombre());
+        evento.setDescripcion(eventoDetalleDTO.getDescripcion());
+        evento.setFecha(eventoDetalleDTO.getFecha());
+        evento.setHora(eventoDetalleDTO.getHora());
+        evento.setVisible(eventoDetalleDTO.getVisible());
+        evento.setImagen(eventoDetalleDTO.getImagen());
+        evento.setUbicacion(eventoDetalleDTO.getUbicacion());
+        eventoRepository.save(evento);
+    }
+    // Metodo para actualizar solo el campo "visible"
+    public void actualizarCampoVisible(Long id, Boolean visible) {
+        Evento evento = eventoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
+        evento.setVisible(visible);
+        eventoRepository.save(evento);
+    }
+
 
 }
