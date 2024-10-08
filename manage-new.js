@@ -1,20 +1,48 @@
 const API_URL = 'https://pj4ld9fn-8080.brs.devtunnels.ms/api';
+let cachedNews = null;
+let newsPerPage = 10; 
+
+function showLoadingIndicator() {
+    const tableBody = document.querySelector('table tbody');
+    tableBody.innerHTML = '<tr><td colspan="5">Cargando noticias...</td></tr>';
+}
+
+function hideLoadingIndicator() {
+    const tableBody = document.querySelector('table tbody');
+    tableBody.innerHTML = '';
+}
 
 async function loadNews() {
+    if (cachedNews) {
+        filterAndDisplayNews(cachedNews); 
+        return;
+    }
+
+    showLoadingIndicator();
+
     try {
         const response = await fetch(`${API_URL}/noticias`);
         if (!response.ok) {
             throw new Error('Error al obtener las noticias');
         }
-        const news = await response.json();
-        console.log('Noticias cargadas:', news);
-        filterAndDisplayNews(news);
+        cachedNews = await response.json(); 
+        console.log('Noticias cargadas:', cachedNews);
+        filterAndDisplayNews(cachedNews);
     } catch (error) {
         console.error('Error al cargar las noticias:', error);
+        hideLoadingIndicator();
     }
 }
 
-function filterAndDisplayNews(news) {
+function debounce(func, wait) {
+    let timeout;
+    return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
+function filterAndDisplayNews(news, page = 1) {
     const searchQuery = document.getElementById('searchInput')?.value.toLowerCase() || '';
     const selectedDateOrder = document.getElementById('filterDate')?.value || 'none';
 
@@ -25,12 +53,16 @@ function filterAndDisplayNews(news) {
     }
 
     if (selectedDateOrder === 'dateDesc') {
-        filteredNews.sort((a, b) => new Date(b.date) - new Date(a.date)); // Más reciente primero
+        filteredNews.sort((a, b) => new Date(b.date) - new Date(a.date)); 
     } else if (selectedDateOrder === 'dateAsc') {
-        filteredNews.sort((a, b) => new Date(a.date) - new Date(b.date)); // Más antiguo primero
+        filteredNews.sort((a, b) => new Date(a.date) - new Date(b.date)); 
     }
 
-    displayNews(filteredNews);
+    const totalPages = Math.ceil(filteredNews.length / newsPerPage);
+    const paginatedNews = filteredNews.slice((page - 1) * newsPerPage, page * newsPerPage);
+
+    requestAnimationFrame(() => displayNews(paginatedNews));
+    updatePaginationControls(totalPages, page);
 }
 
 
@@ -40,7 +72,8 @@ function displayNews(news) {
         console.error('No se encontró el cuerpo de la tabla');
         return;
     }
-    tableBody.innerHTML = '';
+
+    const fragment = document.createDocumentFragment();
 
     if (news.length === 0) {
         tableBody.innerHTML = '<tr><td colspan="5">No se encontraron noticias</td></tr>';
@@ -49,8 +82,8 @@ function displayNews(news) {
 
     news.forEach(item => {
         if (item.status === 'Visible') {
-            const row = `
-                <tr>
+            const row = document.createElement('tr');
+            row.innerHTML = `
                     <td>${item.id}</td>
                     <td>${item.date}</td>
                     <td>${item.category}</td>
@@ -66,11 +99,25 @@ function displayNews(news) {
                             <i class="material-symbols-outlined">delete</i>
                         </a>
                     </td>
-                </tr>
             `;
-            tableBody.innerHTML += row;
+            fragment.appendChild(row);
         }
     });
+    tableBody.innerHTML = ''; 
+    tableBody.appendChild(fragment);
+}
+
+function updatePaginationControls(totalPages, currentPage) {
+    const paginationControls = document.getElementById('paginationControls');
+    paginationControls.innerHTML = '';
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.textContent = i;
+        pageBtn.disabled = i === currentPage;
+        pageBtn.addEventListener('click', () => filterAndDisplayNews(cachedNews, i));
+        paginationControls.appendChild(pageBtn);
+    }
 }
 
 async function deleteNews(id) {
@@ -82,7 +129,6 @@ async function deleteNews(id) {
         const newsItem = await response.json();
 
         console.log('Actualizando status de la noticia:', id);
-        console.log('Status actual:', newsItem.status);
         
         const updateResponse = await fetch(`${API_URL}/noticias/status/${id}?status=Invisible`, {
             method: 'PUT',
@@ -93,19 +139,10 @@ async function deleteNews(id) {
 
         if (updateResponse.ok) {
             console.log('Status actualizado exitosamente');
-            
-            const verificationResponse = await fetch(`${API_URL}/noticias/${id}`);
-            if (verificationResponse.ok) {
-                const updatedItem = await verificationResponse.json();
-                console.log('Estado después de la actualización:', updatedItem);
-                
-                if (updatedItem.status === 'Invisible') {
-                    console.log('Actualización confirmada');
-                    loadNews();  
-                } else {
-                    console.error('La actualización del status no se reflejó correctamente');
-                }
-            }
+
+            cachedNews = cachedNews.map(item => (item.id === id ? { ...item, status: 'Invisible' } : item));
+
+            loadNews(); 
         } else {
             const errorText = await updateResponse.text();
             console.error('Error Response:', errorText);
@@ -230,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
-        searchInput.addEventListener('input', loadNews); 
+        searchInput.addEventListener('input', () => filterAndDisplayNews(cachedNews)); 
     }
 
     const filterCategory = document.getElementById('filterCategory');
@@ -240,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const filterDate = document.getElementById('filterDate');
     if (filterDate) {
-        filterDate.addEventListener('change', loadNews);
+        filterDate.addEventListener('change', () => filterAndDisplayNews(cachedNews)); 
     }
 
     const table = document.querySelector('table');

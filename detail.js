@@ -45,8 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function renderNewsDetail(news) {
     const detailContainer = document.getElementById('news-detail');
 
-    // Construct the full image URL
-    const imageUrl = news.img ? `https://pj4ld9fn-8080.brs.devtunnels.ms/api/noticias/${news.id}/${news.img}` : '/images/prueba.png'; 
+    const imageUrl = news.img ? news.img : '/images/prueba.png'; 
 
     detailContainer.innerHTML = `
         <div class="new">

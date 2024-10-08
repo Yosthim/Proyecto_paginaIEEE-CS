@@ -2,42 +2,60 @@ const API_URL = 'https://pj4ld9fn-8080.brs.devtunnels.ms/api';
 
 async function loadNewsForEdit(id) {
     try {
-        console.log("Loading news with ID:", id); 
+        console.log("Loading news with ID:", id);
         const response = await fetch(`${API_URL}/noticias/${id}`);
         if (!response.ok) {
             throw new Error('Error al obtener la noticia');
         }
         const news = await response.json();
         news.id = news.id || id;
-        populateEditForm(news);
+        requestAnimationFrame(() => populateEditForm(news));
     } catch (error) {
         console.error('Error al cargar la noticia para editar:', error);
     }
 }
 
 function populateEditForm(news) {
-    console.log("Populating form with news data:", news); 
-    const newsIdField = document.getElementById('newsId');
-    const titleField = document.getElementById('title');
-    const categoryField = document.getElementById('category');
-    const autorField = document.getElementById('autor');
-    const sourceField = document.getElementById('source');
-    const contentField = document.getElementById('content');
-    const previewImage = document.getElementById('previewImage');
+    console.log("Populating form with news data:", news);
 
-    if (newsIdField) newsIdField.value = news.id || '';  
-    if (titleField) titleField.value = news.title || '';
-    if (categoryField) categoryField.value = news.category || '';
-    if (autorField) autorField.value = news.autor || '';
-    if (sourceField) sourceField.value = news.source || '';
-    if (contentField) contentField.value = news.content || '';
+    const fields = {
+        newsId: document.getElementById('newsId'),
+        title: document.getElementById('title'),
+        category: document.getElementById('category'),
+        autor: document.getElementById('autor'),
+        source: document.getElementById('source'),
+        content: document.getElementById('content'),
+        previewImage: document.getElementById('previewImage'), 
+        imageInput: document.getElementById('image')  
+    };
 
-    if (news.img && previewImage) {
-        previewImage.src = `${API_URL}/noticias/${news.id}/${news.img}`;  
-        previewImage.style.display = 'block';
-    } else if (previewImage) {
-        previewImage.style.display = 'none';
+    fields.newsId.value = news.id || '';  
+    fields.title.value = news.title || '';
+    fields.category.value = news.category || '';
+    fields.autor.value = news.autor || '';
+    fields.source.value = news.source || '';
+    fields.content.value = news.content || '';
+
+    if (news.img && fields.previewImage) {
+        fields.previewImage.src = news.img; 
+        fields.previewImage.style.display = 'block'; 
+        fields.imageInput.dataset.originalImg = news.img;  
+    } else if (fields.previewImage) {
+        fields.previewImage.style.display = 'none';  
+        fields.imageInput.dataset.originalImg = ''; 
     }
+
+    fields.imageInput.addEventListener('change', () => {
+        const file = fields.imageInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                fields.previewImage.src = e.target.result;
+                fields.previewImage.style.display = 'block'; 
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 }
 
 async function updateNews(newsId, newsData) {
@@ -72,12 +90,11 @@ function showEditConfirmationModal() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-
     const returnBtn = document.getElementById('returnBtn');
     
     if (returnBtn) {
         returnBtn.addEventListener('click', function() {
-            window.location.href = 'manage-news.html';  // Reemplaza con el archivo HTML de destino
+            window.location.href = 'manage-news.html';
         });
     }
 
@@ -91,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("No news ID found in URL!"); 
     }
 
-
     const editForm = document.getElementById('editForm');
     if (editForm) {
         editForm.addEventListener('submit', (e) => {
@@ -102,8 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const autor = document.getElementById('autor')?.value;
             const source = document.getElementById('source')?.value;
             const content = document.getElementById('content')?.value;
-            const img = document.getElementById('image')?.files[0];
-            const originalImg = document.getElementById('previewImage')?.src.split('/').pop();  
+            const imgInput = document.getElementById('image');
+            const newImg = imgInput?.files[0];
+            const originalImg = imgInput?.dataset.originalImg; 
             const date = document.getElementById('newsId').dataset.date || '';  
 
             const newsData = {
@@ -116,14 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 date: date || new Date().toISOString(),  
             };
 
-            // Crear FormData para enviar como multipart/form-data
             const formData = new FormData();
             formData.append('noticia', new Blob([JSON.stringify(newsData)], { type: 'application/json' }));
 
-            if (img) {
-                formData.append('file', img); // Añadir archivo de imagen si está presente
+            if (newImg) {
+                formData.append('file', newImg);  
+            } else if (originalImg) {
+                formData.append('file', new Blob([JSON.stringify({ img: originalImg })], { type: 'application/json' }));
             } else {
-                formData.append('file', new Blob([''], { type: 'text/plain' })); // Añadir null si no hay imagen original ni nueva
+                formData.append('file', new Blob([''], { type: 'text/plain' })); 
             }
 
             if (!newsData.id) {

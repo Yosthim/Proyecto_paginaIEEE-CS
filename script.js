@@ -4,9 +4,12 @@ function renderNews(newsData, containerId) {
     const container = document.getElementById(containerId);
     container.innerHTML = ''; 
 
-    newsData.forEach((news, index) => {
+    newsData.forEach(async(news, index) => {
         const newsItem = document.createElement('div');
-        const newsId = index + 1; 
+        const newsId = news.id;
+
+        const specificContent = await fetchSpecificContent(newsId);
+
 
         if (index === 0 && containerId === 'news-container') {
             newsItem.classList.add('grid-item', 'large-item');
@@ -14,6 +17,7 @@ function renderNews(newsData, containerId) {
                 <img src="${getImageUrl(news.img)}" alt="${news.title}">
                 <div class="text">
                     <h4>${news.title}</h4>
+                    <p>${specificContent ? specificContent.content : news.content}</p>  
                     <div class="flex space-between">
                         <a href="index2.html?id=${newsId}" class="btn">Leer más</a>
                         <p class="date">${news.date || 'Fecha no disponible'}</p>
@@ -36,6 +40,19 @@ function renderNews(newsData, containerId) {
 
         container.appendChild(newsItem);
     });
+}
+
+async function fetchSpecificContent(newsId) {
+    try {
+        const response = await fetch(`https://pj4ld9fn-8080.brs.devtunnels.ms/api/noticias/${newsId}`);
+        if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
+        
+        const specificNews = await response.json();
+        return specificNews; 
+    } catch (error) {
+        console.error('Error al obtener contenido específico:', error);
+        return null;
+    }
 }
 
 function getImageUrl(imgPath) {
