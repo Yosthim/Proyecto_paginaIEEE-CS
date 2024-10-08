@@ -40,15 +40,13 @@ function populateEditForm(news) {
     }
 }
 
-async function updateNews(newsData) {
+async function updateNews(newsId, newsData) {
     try {
-        console.log("Attempting to update news with data:", newsData); 
-        const response = await fetch(`${API_URL}/noticias/${newsData.id}`, {
+        console.log("Attempting to update news with ID:", newsId);
+
+        const response = await fetch(`${API_URL}/noticias/${newsId}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newsData),
+            body: newsData,
         });
         if (response.ok) {
             showEditConfirmationModal();
@@ -114,10 +112,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 category,
                 autor,
                 source,
-                content,
-                img: img ? img.name : originalImg,  
+                content,  
                 date: date || new Date().toISOString(),  
             };
+
+            // Crear FormData para enviar como multipart/form-data
+            const formData = new FormData();
+            formData.append('noticia', new Blob([JSON.stringify(newsData)], { type: 'application/json' }));
+
+            if (img) {
+                formData.append('file', img); // Añadir archivo de imagen si está presente
+            } else {
+                formData.append('file', new Blob([''], { type: 'text/plain' })); // Añadir null si no hay imagen original ni nueva
+            }
 
             if (!newsData.id) {
                 console.error('No ID found for news update!'); 
@@ -125,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            updateNews(newsData);
+            updateNews(newsData.id, formData);
         });
     }
 

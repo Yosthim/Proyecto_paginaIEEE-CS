@@ -144,18 +144,16 @@ async function createNews(newsData) {
     try {
         const response = await fetch(`${API_URL}/noticias`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newsData),
+            body: newsData,
         });
+
         if (response.ok) {
             showCreationDialog();
         } else {
             alert('Error al crear la noticia');
         }
     } catch (error) {
-        console.error('Error al crear la noticia:', error);
+        console.error('Error al conectarse la noticia:', error);
     }
 }
 
@@ -176,6 +174,8 @@ function showCreationDialog() {
 
 document.addEventListener('DOMContentLoaded', () => {
     const newsForm = document.getElementById('newsForm');
+    const previewImage = document.getElementById('preview');
+
     if (newsForm) {
         newsForm.addEventListener('submit', function (e) {
             e.preventDefault();
@@ -194,11 +194,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 autor,
                 source,
                 content,
-                img: img ? img.name : '',
                 date
             };
 
-            createNews(newsData);
+            const formData = new FormData();
+            formData.append('noticia', new Blob([JSON.stringify(newsData)], { type: 'application/json' }));
+            if (img) {
+                formData.append('file', img);
+            }
+
+            createNews(formData);
         });
     }
     
